@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using static System.Net.Mime.MediaTypeNames;
@@ -24,13 +25,20 @@ namespace PLC_program
         //private System.Windows.Forms.Timer evaluationTimer;
 
 
-
-        MySqlConnection connection = new MySqlConnection("server=127.0.0.1 ; user=root; database = bakalarska_praca; password=");
+        //int click = 0;
+        //private Timer refreshTimer;
+        MySqlConnection connection = new MySqlConnection("server=127.0.0.1 ; user=root; Convert Zero Datetime = true ; database = bakalarska_praca; password=");
 
 
         public manModul()
         {
+
+            
             InitializeComponent();
+
+            //refreshTimer = new Timer();
+            //refreshTimer.Interval = 5000; // Set the interval to 5 seconds (5000 milliseconds)
+            //refreshTimer.Tick += RefreshTimer_Tick;
 
 
             try
@@ -202,7 +210,7 @@ namespace PLC_program
                 DataTable dataTable = new DataTable();
                 MySqlCommand command = new MySqlCommand("SELECT * FROM chyby ", connection);
                 MySqlDataAdapter da = new MySqlDataAdapter(command);
-                da.Fill(dataTable);
+                //DataGridView2 = da.Fill(dataTable);
                 dataGridView2.DataSource = dataTable;
 
             }
@@ -633,5 +641,68 @@ namespace PLC_program
         {
 
         }
+
+        private DataTable GetUpdatedDataFromDatabase()
+        {
+            DataTable dataTable = new DataTable();
+
+            // Establish a connection to your MySQL database
+            //MySqlConnection connection = new MySqlConnection("YourConnectionString");
+
+            try
+            {
+                connection.Open();
+
+                // Create a SQL query to fetch the updated data from the database
+                string query = "SELECT * FROM man_vystupy";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                // Execute the query and fetch the data into a DataTable
+                MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+                adapter.Fill(dataTable);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the database operation
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+            finally
+            {
+                // Close the database connection
+                connection.Close();
+            }
+
+            return dataTable;
+        }
+
+
+        /*private void RefreshTimer_Tick(object sender, EventArgs e)
+        {
+            // Code to refresh the DataGridView's data
+            // Fetch the updated data from the database
+            DataTable updatedData = GetUpdatedDataFromDatabase();
+
+            // Update the DataGridView's data source
+            dataGridView1.DataSource = null; // Clear the existing data source
+            dataGridView1.DataSource = updatedData; // Set the updated data as the new data source
+        }*/
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            getDataComboBox();
+            getDataComboBoxO();
+            getDataComboBoxM();
+
+            MySqlCommand command = new MySqlCommand("SELECT * FROM chyby ORDER BY id_chyby DESC", connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+
+            dataGridView2.DataSource = dt;
+        }
     }
 }
+
+
