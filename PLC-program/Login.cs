@@ -46,7 +46,7 @@ namespace PLC_program
                 MySqlDataAdapter sda = new MySqlDataAdapter(query, connection);
                 DataTable dataTable= new DataTable();   
                 sda.Fill(dataTable);
-                Globals.role = query.ExecuteScalar();
+                //Globals.role = query.ExecuteScalar();
 
                 if (dataTable.Rows.Count > 0)
                 {

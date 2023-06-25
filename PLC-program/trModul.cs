@@ -200,7 +200,7 @@ namespace PLC_program
 
 
         }
-        MySqlConnection connection = new MySqlConnection("server=127.0.0.1 ; user=root; database = bakalarska_praca; password=");
+        MySqlConnection connection = new MySqlConnection("server=127.0.0.1 ; user=root; Convert Zero Datetime = true ; database = bakalarska_praca; password=");
 
         private void trModul_Load(object sender, EventArgs e)
         {
@@ -596,6 +596,22 @@ namespace PLC_program
             {
                 connection.Close();
             }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            getDataComboBox();
+            getDataComboBoxO();
+            getDataComboBoxM();
+
+
+            MySqlCommand command = new MySqlCommand("SELECT * FROM chyby", connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+
+            dataGridView2.DataSource = dt;
         }
     }
 }
