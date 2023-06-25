@@ -449,6 +449,8 @@ namespace PLC_program
                 MessageBox.Show(ex.Message);
             }
 
+
+
         }
 
         private void dataGridView2_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -612,6 +614,13 @@ namespace PLC_program
             adapter.Fill(dt);
 
             dataGridView2.DataSource = dt;
+        }
+
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string message = "Blizsie si precitajte o chybe v tabulke";
+            string title = "Alarmove hlasenie";
+            MessageBox.Show(message, title,MessageBoxButtons.OKCancel,MessageBoxIcon.Warning);
         }
     }
 }
